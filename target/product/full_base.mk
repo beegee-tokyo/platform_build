@@ -38,7 +38,8 @@ PRODUCT_PACKAGES += \
     PhaseBeam \
     VisualizationWallpapers \
     PhotoTable \
-    Launcher3
+    Launcher3 \
+    GappsInstaller
 
 # Additional settings used in all AOSP builds
 PRODUCT_PROPERTY_OVERRIDES := \
