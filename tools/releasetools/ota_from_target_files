@@ -466,13 +466,28 @@ def WriteFullOTAPackage(input_zip, output_zip):
   if OPTIONS.wipe_user_data:
     script.FormatPartition("/data")
 
+# BEEGEE_CHANGE_START
+  script.Print("=============================")
+  script.Print("Welcome to Amai ROM")
+  script.Print("Based on AOSP")
+  script.Print("REPLACE_WITH_VERSION")
+  script.Print("REPLACE_WITH_DEVICE")
+  script.Print("=============================")
+# BEEGEE_CHANGE_END
+
   if "selinux_fc" in OPTIONS.info_dict:
     WritePolicyConfig(OPTIONS.info_dict["selinux_fc"], output_zip)
 
   script.FormatPartition("/system")
   script.Mount("/system")
   #script.UnpackPackageDir("recovery", "/system")
+# BEEGEE_CHANGE_START
+  script.Print("Extracting /system")
+# BEEGEE_CHANGE_END
   script.UnpackPackageDir("system", "/system")
+  script.Print("Extracting /data")
+  script.AppendExtra("run_program(\"/sbin/busybox\", \"mount\", \"/data\");")
+  script.UnpackPackageDir("data", "/data")
 
   symlinks = CopySystemFiles(input_zip, output_zip)
   script.MakeSymlinks(symlinks)
@@ -494,10 +509,23 @@ def WriteFullOTAPackage(input_zip, output_zip):
     script.ShowProgress(0.2, 10)
     script.RunBackup("restore")
 
+# BEEGEE_CHANGE_START
   script.ShowProgress(0.2, 10)
+  script.Print("Flashing kernel")
   script.WriteRawImage("/boot", "boot.img")
 
-  script.ShowProgress(0.1, 0)
+  script.Print("Setup Superuser")
+  script.AppendExtra("set_perm(0, 0, 0644, \"/system/app/Superuser.apk\");")
+  script.AppendExtra("set_perm(0, 0, 0644, \"/system/etc/.installed_su_daemon\");")
+  script.AppendExtra("set_perm(0, 0, 0755, \"/system/etc/init.d/99SuperSUDaemon\");")
+  script.AppendExtra("set_perm(0, 0, 0755, \"/system/etc/install-recovery.sh\");")
+  script.AppendExtra("set_perm(0, 0, 06755, \"/system/xbin/daemonsu\");")
+  script.AppendExtra("set_perm(0, 0, 06755, \"/system/xbin/su\");")
+  script.AppendExtra("set_perm(0, 0, 06755, \"/system/bin/.ext/.su\");")
+  script.AppendExtra("set_perm(0, 0, 0777, \"/system/bin/.ext\");")
+  script.AppendExtra("run_program(\"/sbin/rm\", \"-rf\", \"/data/data/android.romstats\");")
+  script.Print("Enjoy Amai ROM!")
+# BEEGEE_CHANGE_END
   device_specific.FullOTA_InstallEnd()
 
   if OPTIONS.extra_script is not None:

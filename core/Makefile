@@ -44,7 +44,6 @@ unique_product_copy_files_destinations :=
 $(foreach cf,$(unique_product_copy_files_pairs), \
     $(eval _src := $(call word-colon,1,$(cf))) \
     $(eval _dest := $(call word-colon,2,$(cf))) \
-    $(call check-product-copy-files,$(cf)) \
     $(if $(filter $(unique_product_copy_files_destinations),$(_dest)), \
         $(info PRODUCT_COPY_FILES $(cf) ignored.), \
         $(eval _fulldest := $(call append-path,$(PRODUCT_OUT),$(_dest))) \
@@ -55,6 +54,10 @@ $(foreach cf,$(unique_product_copy_files_pairs), \
         $(eval unique_product_copy_files_destinations += $(_dest))))
 unique_product_copy_files_pairs :=
 unique_product_copy_files_destinations :=
+# BEEGEE_CHANGE_START
+# removed from line 47
+#     $(call check-product-copy-files,$(cf)) \
+# BEEGEE_CHANGE_END
 
 # -----------------------------------------------------------------
 # docs/index.html
