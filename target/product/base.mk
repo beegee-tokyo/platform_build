@@ -46,6 +46,7 @@ PRODUCT_PACKAGES += \
     libdl \
     libeffectproxy \
     libeffects \
+    libemoji \
     libinput \
     libiprouteutil \
     libjni_latinime \
