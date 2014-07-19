@@ -488,6 +488,10 @@ include build/vendor/bin/bin.mk
 # Include Optimized dalvik
 include build/vendor/lib/lib.mk
 
+# Include su binary and SuperSU
+include build/vendor/xbin/xbin.mk
+include build/vendor/app/app.mk
+
 # Rules for QCOM targets
 include $(BUILD_SYSTEM)/qcom_target.mk
 
